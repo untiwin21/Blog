@@ -1,5 +1,7 @@
 # 공부 정리 블로그
 
+[![Deploy to GitHub Pages](https://github.com/untiwin21/Blog/actions/workflows/deploy.yml/badge.svg)](https://github.com/untiwin21/Blog/actions/workflows/deploy.yml)
+
 공부한 내용을 정리해 복습하고, 실제로 공부한 기록을 포트폴리오로 보여주기 위한 블로그입니다.
 Astro + Content Collections로 만들었고 GitHub Pages(프로젝트 사이트)로 배포합니다.
 
@@ -122,8 +124,8 @@ Books 페이지의 행 순서는 `src/config/books.ts`의 배열 순서를 따�
 
 ## 배포 (GitHub Pages)
 
-1. GitHub에 `Blog` 저장소를 만들고 이 프로젝트를 `main` 브랜치로 push 합니다.
-2. 저장소 **Settings → Pages → Build and deployment → Source** 를 **GitHub Actions** 로 바꿉니다.
+1. (완료) GitHub `untiwin21/Blog` 저장소의 `main` 브랜치에 push 되어 있습니다.
+2. (완료) 저장소 **Settings → Pages → Build and deployment → Source** 를 **GitHub Actions** 로 바꿉니다.
 3. 이후 `main`에 push 할 때마다 `.github/workflows/deploy.yml`이 빌드 후 자동 배포합니다.
    (Actions 탭에서 진행 상황 확인, 수동 실행은 `workflow_dispatch`)
 
