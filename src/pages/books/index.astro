@@ -5,13 +5,13 @@ import BookCard from '../../components/BookCard.astro';
 import { BOOK_CATEGORIES } from '../../config/books';
 
 const books = await getCollection('books');
-// 분류 순서는 src/config/books.ts 를 따르고, 책이 있는 분류만 표시
+// 분류 순서는 src/config/books.ts 를 따르고, 책이 없는 분류도 빈 행으로 표시
 const rows = BOOK_CATEGORIES.map((cat) => ({
   cat,
   books: books
     .filter((b) => b.data.category === cat)
     .sort((a, b) => (b.data.readDate?.getTime() ?? 0) - (a.data.readDate?.getTime() ?? 0)),
-})).filter((r) => r.books.length > 0);
+}));
 ---
 
 <BaseLayout title="Books" description="읽은 책과 독서 노트">
@@ -23,15 +23,18 @@ const rows = BOOK_CATEGORIES.map((cat) => ({
           <h2>
             {r.cat} <span class="muted">{r.books.length}</span>
           </h2>
-          <div class="shelf">
-            {r.books.map((b) => (
-              <BookCard book={b} />
-            ))}
-          </div>
+          {r.books.length > 0 ? (
+            <div class="shelf">
+              {r.books.map((b) => (
+                <BookCard book={b} />
+              ))}
+            </div>
+          ) : (
+            <div class="empty">아직 책이 없습니다</div>
+          )}
         </section>
       ))
     }
-    {rows.length === 0 && <p class="muted">아직 등록된 책이 없습니다.</p>}
   </div>
 </BaseLayout>
 
@@ -40,7 +43,7 @@ const rows = BOOK_CATEGORIES.map((cat) => ({
     margin-bottom: 1.6rem;
   }
   .row {
-    margin-bottom: 2.4rem;
+    margin-bottom: 1.8rem;
   }
   h2 {
     font-size: 1.1rem;
@@ -59,6 +62,16 @@ const rows = BOOK_CATEGORIES.map((cat) => ({
     scroll-snap-type: x mandatory;
     scroll-padding-left: 2px;
     padding: 4px 2px 14px;
+  }
+  .empty {
+    display: flex;
+    align-items: center;
+    height: 56px;
+    padding: 0 1rem;
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
   }
   .shelf::-webkit-scrollbar {
     height: 8px;
