@@ -1,13 +1,14 @@
 ---
 import { Image } from 'astro:assets';
-import type { Book } from '../lib/content';
+import { getBookCover, type Book } from '../lib/content';
 import { url } from '../lib/url';
 
 interface Props {
   book: Book;
 }
 const { book } = Astro.props;
-const { title, author, cover } = book.data;
+const { title, author } = book.data;
+const cover = getBookCover(book);
 // 카드 높이(px). 너비는 표지 원본 비율을 따릅니다.
 const CARD_H = 240;
 ---

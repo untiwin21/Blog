@@ -45,6 +45,7 @@ const books = defineCollection({
       author: z.string(),
       category: z.enum(BOOK_CATEGORIES),
       cover: image().optional(),
+      coverUrl: z.url().optional(), // 표지 원본 주소. 빌드 전에 cover.jpg로 자동 다운로드
       readDate: z.coerce.date().optional(),
       rating: z.number().min(0).max(5).optional(),
       oneLine: z.string().optional(),

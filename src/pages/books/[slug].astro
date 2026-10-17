@@ -2,7 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { formatDate, type Book } from '../../lib/content';
+import { formatDate, getBookCover, type Book } from '../../lib/content';
 import { url } from '../../lib/url';
 
 export async function getStaticPaths() {
@@ -11,7 +11,8 @@ export async function getStaticPaths() {
 }
 
 const { book } = Astro.props as { book: Book };
-const { title, author, category, cover, readDate, rating, oneLine } = book.data;
+const { title, author, category, readDate, rating, oneLine } = book.data;
+const cover = getBookCover(book);
 const { Content } = await render(book);
 const stars = rating != null ? '★'.repeat(Math.round(rating)) + '☆'.repeat(5 - Math.round(rating)) : null;
 ---

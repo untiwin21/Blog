@@ -1,4 +1,5 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
+import type { ImageMetadata } from 'astro';
 import { url } from './url';
 
 export type Post = CollectionEntry<'posts'>;
@@ -59,4 +60,16 @@ export function postsInSeries(posts: Post[], series: Series): Post[] {
 export function formatDate(d: Date): string {
   return d.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit', timeZone: 'Asia/Seoul' })
     .replace(/\.\s?/g, '.').replace(/\.$/, '');
+}
+
+// 책 폴더에 있는 cover.* 파일 (frontmatter에 cover가 없을 때 사용)
+const coverFiles = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/content/books/*/cover.{jpg,jpeg,png,webp,avif}',
+  { eager: true },
+);
+
+export function getBookCover(book: Book): ImageMetadata | undefined {
+  if (book.data.cover) return book.data.cover;
+  const hit = Object.entries(coverFiles).find(([p]) => p.split('/').at(-2) === book.id);
+  return hit?.[1].default;
 }

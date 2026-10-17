@@ -110,7 +110,8 @@ $$
 title: "사피엔스"
 author: 유발 하라리
 category: 역사/문화        # src/config/books.ts 의 분류 중 하나
-cover: ./cover.jpg         # 선택. 없으면 1:1.45 placeholder
+cover: ./cover.jpg         # 선택. 폴더에 cover.* 파일이 있으면 생략해도 자동 인식
+coverUrl: https://...      # 선택. 빌드 전에 cover.jpg로 자동 다운로드 (표지 파일이 없을 때)
 readDate: 2026-03-10       # 선택
 rating: 4                  # 선택 (0~5)
 oneLine: 한줄평             # 선택
@@ -120,7 +121,8 @@ oneLine: 한줄평             # 선택
 ```
 
 Books 페이지의 행 순서는 `src/config/books.ts`의 배열(교보문고 국내도서 분류) 순서를 따르며, 책이 없는 분류도 빈 행으로 표시됩니다.
-카드는 높이가 고정이고 너비는 표지 원본 비율을 따릅니다.
+카드는 높이가 고정이고 너비는 표지 원본 비율을 따릅니다. 표지가 없으면 1:1.45 placeholder가 나옵니다.
+`coverUrl`만 적어 두면 `npm run build`/`npm run dev` 직전에 `scripts/fetch-covers.mjs`가 표지를 내려받습니다(GitHub Actions 배포에서도 동작).
 
 ## 배포 (GitHub Pages)
 

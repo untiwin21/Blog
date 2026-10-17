@@ -13,6 +13,10 @@
   (`title`, `category` 필수, `description`·`order` 선택. 사용자가 원하지 않으면 description은 넣지 않는다)
 - React/컴포넌트가 필요할 때만 `.mdx`를 쓰고, 그 외에는 `.md`를 쓴다.
 - 책 독서노트: `src/content/books/<book-slug>/index.md` + `cover.jpg`. `category`는 `src/config/books.ts`의 값 중 하나.
+- **책을 추가할 때는 반드시 표지도 넣는다.** 한국어판 표지를 찾아(교보문고 상품 페이지의 `contents.kyobobook.co.kr/.../pdt/<ISBN>.jpg` 이미지 등) 다음 중 하나로 처리한다.
+  1. 이미지를 내려받을 수 있으면 책 폴더에 `cover.jpg`로 저장한다 (frontmatter `cover`는 생략해도 자동 인식).
+  2. 내려받을 수 없는 환경이면 frontmatter에 `coverUrl: <이미지 주소>`를 적는다. `npm run build`(GitHub Actions 포함) 전에 `scripts/fetch-covers.mjs`가 `cover.jpg`로 내려받는다.
+  - 저자, 출판사, 번역판 여부를 확인해서 사용자가 읽은 판의 표지를 고른다.
 
 ## 2. frontmatter 형식
 
