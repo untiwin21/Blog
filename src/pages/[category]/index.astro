@@ -1,0 +1,63 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SeriesCard from '../../components/SeriesCard.astro';
+import { CATEGORIES } from '../../config/site';
+import { getPosts, getSeries, postsInSeries, seriesUrl } from '../../lib/content';
+
+export function getStaticPaths() {
+  return CATEGORIES.map((c) => ({ params: { category: c.key }, props: { category: c } }));
+}
+
+const { category } = Astro.props;
+const [allSeries, posts] = await Promise.all([getSeries(), getPosts()]);
+
+const cards = allSeries
+  .filter((s) => s.data.category === category.key)
+  .map((s) => {
+    const list = postsInSeries(posts, s);
+    const updated = list.reduce<Date | undefined>(
+      (max, p) => (!max || p.data.date > max ? p.data.date : max),
+      undefined,
+    );
+    return { s, count: list.length, updated };
+  })
+  .sort((a, b) => {
+    const ao = a.s.data.order, bo = b.s.data.order;
+    if (ao != null && bo != null) return ao - bo;
+    if (ao != null) return -1;
+    if (bo != null) return 1;
+    return (b.updated?.getTime() ?? 0) - (a.updated?.getTime() ?? 0);
+  });
+---
+
+<BaseLayout title={category.label} description={category.description}>
+  <div class="container">
+    <h1 class="page-title">{category.label}</h1>
+    <p class="page-desc">{category.description}</p>
+    {
+      cards.length ? (
+        <div class="grid">
+          {cards.map(({ s, count, updated }) => (
+            <SeriesCard
+              title={s.data.title}
+              description={s.data.description}
+              href={seriesUrl(s)}
+              count={count}
+              updated={updated}
+            />
+          ))}
+        </div>
+      ) : (
+        <p class="muted">아직 시리즈가 없습니다.</p>
+      )
+    }
+  </div>
+</BaseLayout>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.1rem;
+  }
+</style>

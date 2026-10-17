@@ -1,0 +1,64 @@
+---
+import { formatDate } from '../lib/content';
+
+interface Props {
+  title: string;
+  description: string;
+  href: string;
+  count: number;
+  updated?: Date;
+}
+const { title, description, href, count, updated } = Astro.props;
+---
+
+<a class="card" href={href}>
+  <h3>{title}</h3>
+  <p>{description}</p>
+  <div class="meta">
+    <span>글 {count}개</span>
+    {updated && <span>마지막 업데이트 {formatDate(updated)}</span>}
+  </div>
+</a>
+
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.3rem 1.4rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--bg-card);
+    color: var(--text);
+    transition:
+      border-color 0.15s,
+      transform 0.15s,
+      box-shadow 0.15s;
+  }
+  .card:hover {
+    text-decoration: none;
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+  h3 {
+    margin: 0;
+    font-size: 1.15rem;
+    line-height: 1.4;
+  }
+  p {
+    margin: 0;
+    color: var(--text-soft);
+    font-size: 0.93rem;
+    flex: 1;
+  }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-top: 0.6rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+</style>

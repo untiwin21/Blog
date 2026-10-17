@@ -1,0 +1,57 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PostList from '../../../components/PostList.astro';
+import { getCategory } from '../../../config/site';
+import { getPosts, getSeries, getSeriesMap, postsInSeries, postUrl, seriesSlug } from '../../../lib/content';
+import { url } from '../../../lib/url';
+
+export async function getStaticPaths() {
+  const all = await getSeries();
+  return all.map((s) => ({ params: { category: s.data.category, series: seriesSlug(s) }, props: { series: s } }));
+}
+
+const { series } = Astro.props;
+const [posts, seriesMap] = await Promise.all([getPosts(), getSeriesMap()]);
+const list = postsInSeries(posts, series);
+const category = getCategory(series.data.category)!;
+const items = list.map((p, i) => ({
+  title: p.data.title,
+  href: postUrl(p, seriesMap),
+  date: p.data.date,
+  tags: p.data.tags,
+  youtube: !!p.data.youtube,
+  index: i + 1,
+}));
+---
+
+<BaseLayout title={series.data.title} description={series.data.description}>
+  <div class="container narrow">
+    <a class="crumb" href={url(`/${category.key}/`)}>← {category.label}</a>
+    <h1 class="page-title">{series.data.title}</h1>
+    <p class="page-desc">{series.data.description}</p>
+    <p class="count muted">글 {list.length}개</p>
+    {list.length ? <PostList items={items} /> : <p class="muted">아직 글이 없습니다.</p>}
+  </div>
+</BaseLayout>
+
+<style>
+  .narrow {
+    max-width: 820px;
+  }
+  .crumb {
+    display: inline-block;
+    margin-top: 2rem;
+    font-size: 0.9rem;
+    color: var(--text-soft);
+  }
+  .page-title {
+    margin-top: 0.6rem;
+  }
+  .page-desc {
+    margin-bottom: 0.5rem;
+  }
+  .count {
+    font-size: 0.85rem;
+    margin: 0 0 1rem;
+  }
+</style>

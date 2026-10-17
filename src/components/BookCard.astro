@@ -1,0 +1,107 @@
+---
+import { Image } from 'astro:assets';
+import type { Book } from '../lib/content';
+import { url } from '../lib/url';
+
+interface Props {
+  book: Book;
+}
+const { book } = Astro.props;
+const { title, author, cover } = book.data;
+// 카드 높이(px). 너비는 표지 원본 비율을 따릅니다.
+const CARD_H = 240;
+---
+
+<a class="book-card" href={url(`/books/${book.id}/`)} title={`${title} — ${author}`}>
+  {
+    cover ? (
+      <Image
+        src={cover}
+        alt={`${title} 표지`}
+        height={CARD_H * 2}
+        loading="lazy"
+        class="cover"
+      />
+    ) : (
+      <div class="cover placeholder" aria-label={`${title} (표지 없음)`}>
+        <span>{title}</span>
+      </div>
+    )
+  }
+  <div class="info">
+    <strong>{title}</strong>
+    <span>{author}</span>
+  </div>
+</a>
+
+<style>
+  .book-card {
+    --h: 240px;
+    position: relative;
+    flex: none;
+    height: var(--h);
+    display: block;
+    border-radius: 6px;
+    overflow: hidden;
+    scroll-snap-align: start;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    background: var(--bg-soft);
+  }
+  .cover {
+    display: block;
+    height: 100%;
+    width: auto;
+    max-width: none;
+    object-fit: contain;
+  }
+  .placeholder {
+    aspect-ratio: 1 / 1.45;
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+    text-align: center;
+    color: var(--text-soft);
+    font-weight: 600;
+    background: linear-gradient(160deg, var(--bg-soft), var(--border));
+  }
+  .info {
+    position: absolute;
+    inset: auto 0 0 0;
+    padding: 2.2rem 0.75rem 0.7rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    color: #fff;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0));
+    font-size: 0.82rem;
+    line-height: 1.35;
+    opacity: 0;
+    transform: translateY(6px);
+    transition:
+      opacity 0.18s,
+      transform 0.18s;
+  }
+  .info strong {
+    font-size: 0.92rem;
+  }
+  .book-card:hover .info,
+  .book-card:focus-visible .info {
+    opacity: 1;
+    transform: none;
+  }
+  .book-card:hover {
+    text-decoration: none;
+  }
+  @media (hover: none) {
+    .info {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @media (max-width: 600px) {
+    .book-card {
+      --h: 190px;
+    }
+  }
+</style>

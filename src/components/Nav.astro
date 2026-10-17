@@ -1,0 +1,222 @@
+---
+import { CATEGORIES, SITE } from '../config/site';
+import { url, stripBase } from '../lib/url';
+
+const items = [
+  { key: '', label: 'Home' },
+  ...CATEGORIES.map((c) => ({ key: c.key, label: c.label })),
+  { key: 'books', label: 'Books' },
+];
+// 현재 경로의 첫 세그먼트로 활성 메뉴 판단
+const current = stripBase(Astro.url.pathname).split('/').filter(Boolean)[0] ?? '';
+---
+
+<header class="nav">
+  <div class="container nav-inner">
+    <a class="brand" href={url('/')}>{SITE.title}</a>
+
+    <nav id="site-menu" class="menu" aria-label="주 메뉴">
+      {
+        items.map((it) => (
+          <a
+            href={url(it.key ? `/${it.key}/` : '/')}
+            class:list={['menu-link', { active: current === it.key }]}
+            aria-current={current === it.key ? 'page' : undefined}
+          >
+            {it.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="actions">
+      <button class="icon-btn" id="theme-toggle" type="button" aria-label="다크 모드 전환" title="다크 모드 전환">
+        <svg class="sun" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"
+          ><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"></circle><path
+            d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8 6 18M18 6l1.8-1.8"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"></path></svg
+        >
+        <svg class="moon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"
+          ><path
+            d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linejoin="round"></path></svg
+        >
+      </button>
+      <button
+        class="icon-btn hamburger"
+        id="menu-toggle"
+        type="button"
+        aria-label="메뉴 열기"
+        aria-controls="site-menu"
+        aria-expanded="false"
+      >
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<script>
+  const themeBtn = document.getElementById('theme-toggle');
+  themeBtn?.addEventListener('click', () => {
+    const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = next;
+    try {
+      localStorage.setItem('theme', next);
+    } catch {}
+  });
+  // 저장된 선택이 없으면 시스템 설정 변경을 따라감
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    let saved = null;
+    try {
+      saved = localStorage.getItem('theme');
+    } catch {}
+    if (!saved) document.documentElement.dataset.theme = e.matches ? 'dark' : 'light';
+  });
+
+  const menuBtn = document.getElementById('menu-toggle');
+  const menu = document.getElementById('site-menu');
+  menuBtn?.addEventListener('click', () => {
+    const open = menu?.classList.toggle('open') ?? false;
+    menuBtn.setAttribute('aria-expanded', String(open));
+    menuBtn.setAttribute('aria-label', open ? '메뉴 닫기' : '메뉴 열기');
+  });
+</script>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    height: var(--nav-h);
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: saturate(180%) blur(10px);
+    -webkit-backdrop-filter: saturate(180%) blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-inner {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  .brand {
+    font-weight: 700;
+    color: var(--text);
+    white-space: nowrap;
+    letter-spacing: -0.01em;
+  }
+  .brand:hover {
+    text-decoration: none;
+  }
+  .menu {
+    display: flex;
+    gap: 0.25rem;
+    margin-left: auto;
+  }
+  .menu-link {
+    color: var(--text-soft);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+  .menu-link:hover {
+    color: var(--text);
+    background: var(--bg-soft);
+    text-decoration: none;
+  }
+  .menu-link.active {
+    color: var(--accent);
+    background: var(--accent-soft);
+    font-weight: 600;
+  }
+  .actions {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+  }
+  .icon-btn {
+    width: 38px;
+    height: 38px;
+    display: inline-grid;
+    place-items: center;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-soft);
+    cursor: pointer;
+  }
+  .icon-btn:hover {
+    background: var(--bg-soft);
+    color: var(--text);
+  }
+  :global(:root[data-theme='dark']) .sun,
+  :global(:root:not([data-theme='dark'])) .moon {
+    display: none;
+  }
+  .hamburger {
+    display: none;
+  }
+  .hamburger span {
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: currentColor;
+    border-radius: 2px;
+    grid-area: 1 / 1;
+    transition: transform 0.2s;
+  }
+  .hamburger span:nth-child(1) {
+    transform: translateY(-6px);
+  }
+  .hamburger span:nth-child(3) {
+    transform: translateY(6px);
+  }
+  .hamburger[aria-expanded='true'] span:nth-child(1) {
+    transform: rotate(45deg);
+  }
+  .hamburger[aria-expanded='true'] span:nth-child(2) {
+    opacity: 0;
+  }
+  .hamburger[aria-expanded='true'] span:nth-child(3) {
+    transform: rotate(-45deg);
+  }
+
+  @media (max-width: 760px) {
+    .nav-inner {
+      gap: 0.5rem;
+    }
+    .actions {
+      margin-left: auto;
+    }
+    .hamburger {
+      display: inline-grid;
+    }
+    .menu {
+      display: none;
+      position: absolute;
+      top: var(--nav-h);
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      gap: 0;
+      padding: 8px 12px 14px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+    .menu.open {
+      display: flex;
+    }
+    .menu-link {
+      padding: 10px 12px;
+      font-size: 1rem;
+    }
+  }
+</style>

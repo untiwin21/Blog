@@ -1,0 +1,88 @@
+---
+import 'katex/dist/katex.min.css';
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import { SITE } from '../config/site';
+import { url } from '../lib/url';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+const { title, description = SITE.description } = Astro.props;
+const fullTitle = title ? `${title} | ${SITE.title}` : SITE.title;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href={url('/favicon.svg')} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+
+    <!-- 테마: 저장된 값 > 시스템 설정. 깜빡임 방지를 위해 head에서 즉시 실행 -->
+    <script is:inline>
+      (function () {
+        var t = null;
+        try { t = localStorage.getItem('theme'); } catch (e) {}
+        if (t !== 'light' && t !== 'dark') {
+          t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.dataset.theme = t;
+      })();
+    </script>
+
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;1,400&display=swap"
+    />
+    <slot name="head" />
+  </head>
+  <body>
+    <Nav />
+    <main>
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="container">
+        <span>© {new Date().getFullYear()} {SITE.author}</span>
+        {SITE.links.map((l) => <a href={l.href} target="_blank" rel="noopener">{l.label}</a>)}
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  main {
+    min-height: calc(100vh - var(--nav-h) - 80px);
+    padding-bottom: 4rem;
+  }
+  .site-footer {
+    border-top: 1px solid var(--border);
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    padding: 1.5rem 0;
+  }
+  .site-footer .container {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .site-footer a {
+    color: var(--text-soft);
+  }
+</style>

@@ -1,0 +1,68 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BookCard from '../../components/BookCard.astro';
+import { BOOK_CATEGORIES } from '../../config/books';
+
+const books = await getCollection('books');
+// 분류 순서는 src/config/books.ts 를 따르고, 책이 있는 분류만 표시
+const rows = BOOK_CATEGORIES.map((cat) => ({
+  cat,
+  books: books
+    .filter((b) => b.data.category === cat)
+    .sort((a, b) => (b.data.readDate?.getTime() ?? 0) - (a.data.readDate?.getTime() ?? 0)),
+})).filter((r) => r.books.length > 0);
+---
+
+<BaseLayout title="Books" description="읽은 책과 독서 노트">
+  <div class="container">
+    <h1 class="page-title">Books</h1>
+    <p class="page-desc">읽은 책과 독서 노트. 총 {books.length}권</p>
+    {
+      rows.map((r) => (
+        <section class="row">
+          <h2>
+            {r.cat} <span class="muted">{r.books.length}</span>
+          </h2>
+          <div class="shelf">
+            {r.books.map((b) => (
+              <BookCard book={b} />
+            ))}
+          </div>
+        </section>
+      ))
+    }
+    {rows.length === 0 && <p class="muted">아직 등록된 책이 없습니다.</p>}
+  </div>
+</BaseLayout>
+
+<style>
+  .row {
+    margin-bottom: 2.4rem;
+  }
+  h2 {
+    font-size: 1.1rem;
+    margin: 0 0 0.8rem;
+  }
+  h2 .muted {
+    font-weight: 400;
+    font-size: 0.9rem;
+    margin-left: 0.3rem;
+  }
+  .shelf {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: 2px;
+    padding: 4px 2px 14px;
+  }
+  .shelf::-webkit-scrollbar {
+    height: 8px;
+  }
+  .shelf::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+  }
+</style>

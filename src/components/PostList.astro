@@ -1,0 +1,99 @@
+---
+import YouTubeIcon from './YouTubeIcon.astro';
+import { formatDate } from '../lib/content';
+
+export interface PostItem {
+  title: string;
+  href: string;
+  date: Date;
+  tags?: string[];
+  youtube?: boolean;
+  seriesTitle?: string;
+  seriesHref?: string;
+  index?: number;
+}
+interface Props {
+  items: PostItem[];
+}
+const { items } = Astro.props;
+---
+
+<ul class="post-list">
+  {
+    items.map((p) => (
+      <li class="post-item">
+        {p.index != null && <span class="idx">{String(p.index).padStart(2, '0')}</span>}
+        <div class="body">
+          <a class="title" href={p.href}>
+            {p.title}
+          </a>
+          {p.youtube && <YouTubeIcon />}
+          <div class="meta">
+            <time datetime={p.date.toISOString()}>{formatDate(p.date)}</time>
+            {p.seriesTitle && p.seriesHref && (
+              <>
+                <span class="dot">·</span>
+                <a class="series" href={p.seriesHref}>
+                  {p.seriesTitle}
+                </a>
+              </>
+            )}
+            {p.tags?.map((t) => <span class="tag">{t}</span>)}
+          </div>
+        </div>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .post-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .post-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .post-item:first-child {
+    border-top: 1px solid var(--border);
+  }
+  .idx {
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    padding-top: 0.15rem;
+    min-width: 1.6rem;
+  }
+  .body {
+    flex: 1;
+    min-width: 0;
+  }
+  .title {
+    color: var(--text);
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin-right: 0.35rem;
+  }
+  .title:hover {
+    color: var(--accent);
+  }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.25rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+  .series {
+    color: var(--text-soft);
+  }
+  .dot {
+    margin: 0 0.1rem;
+  }
+</style>
