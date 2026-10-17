@@ -11,7 +11,7 @@ const series = defineCollection({
   schema: z.object({
     title: z.string(),
     category: z.enum(CATEGORY_KEYS),
-    description: z.string(),
+    description: z.string().optional(),
     order: z.number().optional(),
   }),
 });

@@ -30,17 +30,15 @@ const cards = allSeries
   });
 ---
 
-<BaseLayout title={category.label} description={category.description}>
+<BaseLayout title={category.label}>
   <div class="container">
     <h1 class="page-title">{category.label}</h1>
-    <p class="page-desc">{category.description}</p>
     {
       cards.length ? (
         <div class="grid">
           {cards.map(({ s, count, updated }) => (
             <SeriesCard
               title={s.data.title}
-              description={s.data.description}
               href={seriesUrl(s)}
               count={count}
               updated={updated}
@@ -55,6 +53,9 @@ const cards = allSeries
 </BaseLayout>
 
 <style>
+  .page-title {
+    margin-bottom: 1.6rem;
+  }
   .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));

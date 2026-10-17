@@ -28,7 +28,7 @@ const items = list.map((p, i) => ({
   <div class="container narrow">
     <a class="crumb" href={url(`/${category.key}/`)}>← {category.label}</a>
     <h1 class="page-title">{series.data.title}</h1>
-    <p class="page-desc">{series.data.description}</p>
+    {series.data.description && <p class="page-desc">{series.data.description}</p>}
     <p class="count muted">글 {list.length}개</p>
     {list.length ? <PostList items={items} /> : <p class="muted">아직 글이 없습니다.</p>}
   </div>

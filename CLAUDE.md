@@ -10,7 +10,7 @@
   - `<NN>`: 시리즈 내 순번 두 자리 (`01`, `02`, ...). frontmatter `order`와 일치시킨다.
   - `<post-slug>`: 영어 소문자 kebab-case (예: `configuration-space`). 한글 파일명 금지.
 - 시리즈가 없으면 먼저 만든다: `src/content/series/<category>/<series-slug>.md`
-  (`title`, `category`, `description` 필수, `order` 선택)
+  (`title`, `category` 필수, `description`·`order` 선택. 사용자가 원하지 않으면 description은 넣지 않는다)
 - React/컴포넌트가 필요할 때만 `.mdx`를 쓰고, 그 외에는 `.md`를 쓴다.
 - 책 독서노트: `src/content/books/<book-slug>/index.md` + `cover.jpg`. `category`는 `src/config/books.ts`의 값 중 하나.
 

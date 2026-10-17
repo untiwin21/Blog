@@ -1,9 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostList from '../components/PostList.astro';
-import { SITE, CATEGORIES } from '../config/site';
+import { SITE } from '../config/site';
 import { getPosts, getSeriesMap, postUrl, seriesUrl, byDateDesc } from '../lib/content';
-import { url } from '../lib/url';
 
 const [posts, seriesMap] = await Promise.all([getPosts(), getSeriesMap()]);
 const recent = posts
@@ -25,18 +24,16 @@ const recent = posts
 
 <BaseLayout>
   <div class="container narrow">
-    <section class="intro">
-      <h1>{SITE.author}</h1>
-      <p class="affil">{SITE.affiliation}</p>
-      <p class="bio">{SITE.intro}</p>
-      <div class="cats">
-        {CATEGORIES.map((c) => <a href={url(`/${c.key}/`)}>{c.label}</a>)}
-        <a href={url('/books/')}>Books</a>
-      </div>
-    </section>
+    <h1 class="home-title">{SITE.title}</h1>
 
-    <h2 class="section-title">최근 글</h2>
-    {recent.length ? <PostList items={recent} /> : <p class="muted">아직 글이 없습니다.</p>}
+    {
+      recent.length > 0 && (
+        <>
+          <h2 class="section-title">최근 글</h2>
+          <PostList items={recent} />
+        </>
+      )
+    }
   </div>
 </BaseLayout>
 
@@ -44,39 +41,10 @@ const recent = posts
   .narrow {
     max-width: 820px;
   }
-  .intro {
-    padding: 3.5rem 0 1rem;
-  }
-  h1 {
-    font-size: 2.1rem;
-    margin: 0;
+  .home-title {
+    font-size: 2.2rem;
     letter-spacing: -0.02em;
-  }
-  .affil {
-    margin: 0.2rem 0 1rem;
-    color: var(--text-soft);
-    font-weight: 500;
-  }
-  .bio {
-    margin: 0 0 1.4rem;
-    color: var(--text-soft);
-    max-width: 640px;
-  }
-  .cats {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-  .cats a {
-    padding: 4px 14px;
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    color: var(--text-soft);
-    font-size: 0.9rem;
-  }
-  .cats a:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-    text-decoration: none;
+    margin: 0;
+    padding: 3.5rem 0 1rem;
   }
 </style>

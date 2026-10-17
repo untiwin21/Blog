@@ -31,7 +31,7 @@ const REPO_NAME = 'Blog';
 ```
 
 모든 내부 링크는 `src/lib/url.ts`의 `url()` 함수로 만들기 때문에 base 경로가 자동으로 붙습니다.
-자기소개 문구, 이름, 외부 링크는 `src/config/site.ts`에서 수정합니다.
+사이트 제목(홈 제목), 외부 링크는 `src/config/site.ts`에서 수정합니다.
 
 ## 폴더 구조
 
@@ -64,9 +64,9 @@ URL 규칙
 
 ```md
 ---
-title: Modern Robotics
-category: robotics
-description: 한 줄 설명
+title: 자료구조 및 알고리즘
+category: cse
+description: 한 줄 설명  # 선택. 지금은 화면에 표시하지 않음
 order: 1            # 선택. 카테고리 페이지에서 카드 정렬 순서 (없으면 최근 업데이트 순)
 ---
 ```
