@@ -9,7 +9,7 @@ import rehypeKatex from 'rehype-katex';
 // 배포 정보: 사용자명/저장소 이름이 바뀌면 여기 두 줄만 고치면 됩니다.
 // ───────────────────────────────────────────────
 const GITHUB_USERNAME = 'untiwin21';
-const REPO_NAME = 'study-blog';
+const REPO_NAME = 'Blog';
 
 export default defineConfig({
   site: `https://${GITHUB_USERNAME}.github.io`,

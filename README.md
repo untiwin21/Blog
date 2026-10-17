@@ -3,7 +3,7 @@
 공부한 내용을 정리해 복습하고, 실제로 공부한 기록을 포트폴리오로 보여주기 위한 블로그입니다.
 Astro + Content Collections로 만들었고 GitHub Pages(프로젝트 사이트)로 배포합니다.
 
-- 배포 주소: https://untiwin21.github.io/study-blog/
+- 배포 주소: https://untiwin21.github.io/Blog/
 - 메뉴: Home | Robotics | AI | ME | CSE | Books
 
 ## 로컬 실행
@@ -12,9 +12,9 @@ Node.js 22.22 이상이 필요합니다.
 
 ```bash
 npm install
-npm run dev        # 개발 서버: http://localhost:4321/study-blog/
+npm run dev        # 개발 서버: http://localhost:4321/Blog/
 npm run build      # dist/ 에 정적 사이트 생성
-npm run preview    # 빌드 결과 미리보기: http://localhost:4321/study-blog/
+npm run preview    # 빌드 결과 미리보기: http://localhost:4321/Blog/
 ```
 
 > `draft: true` 인 글은 `npm run dev` 에서는 보이고, `npm run build` 결과에서는 빠집니다.
@@ -25,7 +25,7 @@ npm run preview    # 빌드 결과 미리보기: http://localhost:4321/study-blo
 
 ```js
 const GITHUB_USERNAME = 'untiwin21';
-const REPO_NAME = 'study-blog';
+const REPO_NAME = 'Blog';
 ```
 
 모든 내부 링크는 `src/lib/url.ts`의 `url()` 함수로 만들기 때문에 base 경로가 자동으로 붙습니다.
@@ -51,10 +51,10 @@ URL 규칙
 
 | 대상 | 파일 | URL |
 | --- | --- | --- |
-| 카테고리 | `config/site.ts` | `/study-blog/robotics/` |
-| 시리즈 | `series/robotics/modern-robotics.md` | `/study-blog/robotics/modern-robotics/` |
-| 글 | `posts/robotics/modern-robotics/01-configuration-space.md` | `/study-blog/robotics/modern-robotics/01-configuration-space/` |
-| 책 | `books/sapiens/index.md` | `/study-blog/books/sapiens/` |
+| 카테고리 | `config/site.ts` | `/Blog/robotics/` |
+| 시리즈 | `series/robotics/modern-robotics.md` | `/Blog/robotics/modern-robotics/` |
+| 글 | `posts/robotics/modern-robotics/01-configuration-space.md` | `/Blog/robotics/modern-robotics/01-configuration-space/` |
+| 책 | `books/sapiens/index.md` | `/Blog/books/sapiens/` |
 
 ## 새 시리즈 추가
 
@@ -122,7 +122,7 @@ Books 페이지의 행 순서는 `src/config/books.ts`의 배열 순서를 따�
 
 ## 배포 (GitHub Pages)
 
-1. GitHub에 `study-blog` 저장소를 만들고 이 프로젝트를 `main` 브랜치로 push 합니다.
+1. GitHub에 `Blog` 저장소를 만들고 이 프로젝트를 `main` 브랜치로 push 합니다.
 2. 저장소 **Settings → Pages → Build and deployment → Source** 를 **GitHub Actions** 로 바꿉니다.
 3. 이후 `main`에 push 할 때마다 `.github/workflows/deploy.yml`이 빌드 후 자동 배포합니다.
    (Actions 탭에서 진행 상황 확인, 수동 실행은 `workflow_dispatch`)
