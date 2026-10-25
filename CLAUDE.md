@@ -6,7 +6,7 @@
 ## 1. 파일 위치
 
 - 글: `src/content/posts/<category>/<series-slug>/<NN>-<post-slug>.md`
-  - `<category>`: `robotics | ai | me | cse`
+  - `<category>`: `robotics | ai | me | cse | writings`
   - `<NN>`: 시리즈 내 순번 두 자리 (`01`, `02`, ...). frontmatter `order`와 일치시킨다.
   - `<post-slug>`: 영어 소문자 kebab-case (예: `configuration-space`). 한글 파일명 금지.
 - 시리즈가 없으면 먼저 만든다: `src/content/series/<category>/<series-slug>.md`

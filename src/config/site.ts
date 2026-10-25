@@ -16,6 +16,7 @@ export const CATEGORIES = [
   { key: 'ai', label: 'AI' },
   { key: 'me', label: 'ME' },
   { key: 'cse', label: 'CSE' },
+  { key: 'writings', label: 'Writings' },
 ] as const;
 
 export type CategoryKey = (typeof CATEGORIES)[number]['key'];

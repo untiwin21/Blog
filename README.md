@@ -60,7 +60,7 @@ URL 규칙
 
 ## 새 시리즈 추가
 
-`src/content/series/<category>/<series-slug>.md` 를 만듭니다. category는 `robotics | ai | me | cse` 중 하나입니다.
+`src/content/series/<category>/<series-slug>.md` 를 만듭니다. category는 `robotics | ai | me | cse | writings` 중 하나입니다.
 
 ```md
 ---
